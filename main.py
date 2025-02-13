@@ -50,7 +50,10 @@ class CSV:
         total_expense=filtered_df[filtered_df["category"]=="Expense"]["amount"].sum()
         print("\nSummary:")
         print(f"Total Income:${total_income:.2f}")
-        
+        print(f"Total Expense:${total_expense:.2f}")
+        print(f"Net Savings: ${(total_income-total_expense):.2f}")
+    
+    return filtered_df
 
 def add():
     CSV.intialize_csv()
