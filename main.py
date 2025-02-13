@@ -6,7 +6,7 @@ from data_entry import get_amount,get_category,get_date,get_description
 import matplotlib.pyplot as plt
 class CSV:
     CSV_FILE="finance_data.csv"
-    COLUMNS = ["data", "amount", "category", "description"]
+    COLUMNS = ["date", "amount", "category", "description"]
     FORMAT="%d-%m-%Y"
     @classmethod
     def intialize_csv(cls):
@@ -17,9 +17,9 @@ class CSV:
             df.to_csv(cls.CSV_FILE,index=False)
 
     @classmethod
-    def add_entry(cls,data,amount,category,description):
+    def add_entry(cls,date,amount,category,description):
         new_entry={
-            "data":data,
+            "date":date,
             "amount":amount,
             "category":category,
             "description":description
@@ -32,11 +32,11 @@ class CSV:
     @classmethod
     def get_transactions(cls,start_date,end_date):
         df=pd.read_csv(cls.CSV_FILE)
-        df["data"]=pd.to_datetime(df["data"],format=CSV.FORMAT)
+        df["date"]=pd.to_datetime(df["date"],format=CSV.FORMAT)
         start_date=datetime.strptime(start_date,CSV.FORMAT)
         end_date=datetime.strptime(end_date,CSV.FORMAT)
 
-        mask=(df["data"]>=start_date) & (df["data"] <= end_date)
+        mask=(df["date"]>=start_date) & (df["date"] <= end_date)
         filtered_df=df.loc[mask]
 
 
@@ -44,7 +44,7 @@ class CSV:
             print("No transactions found in the give data range")
         else:
             print(f"Transcations form {start_date.strftime(CSV.FORMAT)} to {end_date.strftime(CSV.FORMAT)}")
-            print(filtered_df.to_string(index=False,formatters={"data":lambda x:x.strftime(CSV.FORMAT)}))
+            print(filtered_df.to_string(index=False,formatters={"date":lambda x:x.strftime(CSV.FORMAT)}))
             total_income= filtered_df[filtered_df["category"]=="Income"]["amount"].sum()
             total_expense=filtered_df[filtered_df["category"]=="Expense"]["amount"].sum()
             print("\nSummary:")
@@ -63,7 +63,7 @@ def add():
     CSV.add_entry(date,amount,category,description)
 
 def plot_transcation(df):
-    df.set_index('data', inplace=True)
+    df.set_index('date', inplace=True)
     
    
     income_df = df[df["category"] == "Income"].resample("D").sum().reindex(df.index, fill_value=0)
