@@ -45,7 +45,12 @@ class CSV:
     else:
         print(f"Transcations form {start_date.strftime(CSV.FORMAT)} to {end_date.strftime(CSV.FORMAT)}")
         print(filtered_df.to_string(index=False,formatters={"date":lambda x:x.strftime(CSV.FORMAT)}))
-
+       
+        total_income= filtered_df[filtered_df["category"]=="Income"]["amount"].sum()
+        total_expense=filtered_df[filtered_df["category"]=="Expense"]["amount"].sum()
+        print("\nSummary:")
+        print(f"Total Income:${total_income:.2f}")
+        
 
 def add():
     CSV.intialize_csv()
